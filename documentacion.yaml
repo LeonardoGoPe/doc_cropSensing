@@ -13,6 +13,8 @@ tags:
   description: Representan las Fincas (Farm)
 - name: Farm-Crop-User
   description: Representa la relación entre Cultivos - Fincas y Usuarios (Tabla ListaCultivos)
+- name: User
+  description: Representa los usuarios registrados en el sistema
 paths:
   /info/crop/crops:
     get:
@@ -640,6 +642,58 @@ paths:
                     type: string
                     format: number
                     example: Relación Usuario, Cultivo y Finca eliminada con éxito
+        400:
+          description: Cualquier error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/users:
+    get:
+      tags:
+      - User
+      summary: Obtener la data de los Usuarios en el sistema
+      description: Api para obtener la data de los usuarios registrados en el sistema
+      responses:
+        200:
+          description: Operación exitosa.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties: 
+                    id:
+                      type: integer
+                      format: number
+                      example: 1
+                    user_tag:
+                      type: string
+                      example: Prueba
+                    user_type:
+                      type: integer
+                      format: number
+                      example: 1
+                    data_user_table: 
+                      properties: 
+                        id:
+                          type: integer
+                          format: number
+                          example: 1
+                        username:
+                          type: string
+                          example: ESPOL
+                        first_name:
+                          type: string
+                          example: CIDIS
+                        last_name:
+                          type: string
+                          example: ESPOL
+                        email:
+                          type: string
+                          example: cidis@espol.edu.ec
+                   
         400:
           description: Cualquier error
           content:
