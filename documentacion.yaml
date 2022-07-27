@@ -736,6 +736,9 @@ components:
         imagen:
           type: string
           example: /images/finca/espol.jpeg
+        descripcion:
+          type: string
+          example: Es la finca del campus
         user:
           type: integer
           format: number
