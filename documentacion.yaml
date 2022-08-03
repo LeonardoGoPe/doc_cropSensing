@@ -17,6 +17,10 @@ tags:
   description: Representa los usuarios registrados en el sistema
 - name: Devices
   description: Representa funciones para manejo de dispositivos y notificaciones
+- name: Notificaciones
+  description: Representa manejo de notificaciones
+- name: Reporteria
+  description: Representa los reportes que se pueden generar
 paths:
   /info/crop/crops:
     get:
@@ -775,7 +779,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /notifications:
+  /users/notifications:
     post:
       tags:
       - Devices
@@ -800,6 +804,172 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+  /info/notifications/notifications:
+    get:
+      tags:
+      - Notificaciones
+      summary: Obtener las notificaciones
+      description: Api para obtener las notificaciones
+      parameters:
+      - name: user_tag
+        in: query
+        description: Campo user_tag (Identificador del usuario). Si se envia, se traen los registros del usuario. En caso de no enviarlo, se traen todos los registros de la tabla
+        required: true
+        schema:
+          type: string
+      - name: was_reviewed
+        in: query
+        description: Filtra por registros activos. Se envía 'S' o 'N'
+        required: false
+        schema:
+          type: string    
+          example: N
+      responses:
+        200:
+          description: Operación exitosa.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/objNotificaciones'
+                   
+        400:
+          description: Cualquier error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /info/notifications/notifications/{id}:
+    put:
+      tags:
+      - Notificaciones
+      summary: Actualizar registro de notificaciones
+      description: Api para actualizar un registro de notificaciones, enfocado para actualizar el campo 'fue_revisada'
+      parameters:
+      - name: id
+        in: path
+        description: Identificador del registro
+        required: true
+        schema:
+          type: number
+      requestBody:
+        description: Enviar el campo fue_revisada para actualizar luego de que el usuario haya visto la notificacion
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fue_revisada:
+                  type: string
+                  example: S
+        
+      responses:
+        200:
+          description: Operación exitosa.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/objNotificaciones'
+        400:
+          description: Cualquier error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /util/general_report:
+    post:
+      tags:
+      - Reporteria
+      summary: Obtener reporte general
+      description: Api para obtener reporte general en formato PDF
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tiempo:
+                  type: string
+                  example: "Última Hora"
+                cultivo:
+                  type: string
+                  example: "cebolla"
+                user_tag:
+                  type: string
+                  example: "Prueba"
+                medida:
+                  type: string
+                  example: "radiacion"
+                finca:
+                  type: string
+                  example: "ESPOL"
+      responses:
+        200:
+          description: Operación exitosa.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: string
+                   
+        400:
+          description: Cualquier error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /util/farm_detail_report:
+    post:
+      tags:
+      - Reporteria
+      summary: Obtener reporte de los detalles de la finca
+      description: Api para obtener reporte de los detalles de la finca en formato PDF
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tiempo:
+                  type: string
+                  example: "Última Hora"
+                cultivo:
+                  type: string
+                  example: "cebolla"
+                user_tag:
+                  type: string
+                  example: "Prueba"
+                medida:
+                  type: string
+                  example: "radiacion"
+                finca:
+                  type: string
+                  example: "ESPOL"
+      responses:
+        200:
+          description: Operación exitosa.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: string
+                   
+        400:
+          description: Cualquier error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
 
 components:
   schemas:
@@ -937,3 +1107,29 @@ components:
         type:
           type: string
           example: android
+
+    objNotificaciones:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: number
+          example: 1
+        user_tag:
+          type: string
+          example: Prueba
+        titulo:
+          type: string
+          example: Titulo
+        cuerpo:
+          type: string
+          example: Cuerpo
+        fue_revisada:
+          type: string
+          example: N
+        fecha:
+          type: string
+          example: "2022-08-02 21:31:14"
+        dia:
+          type: string
+          example: MARTES
