@@ -814,7 +814,7 @@ paths:
       parameters:
       - name: user_tag
         in: query
-        description: Campo user_tag (Identificador del usuario). Si se envia, se traen los registros del usuario. En caso de no enviarlo, se traen todos los registros de la tabla
+        description: Campo user_tag (Identificador del usuario). Trae los registros del usuario
         required: true
         schema:
           type: string
